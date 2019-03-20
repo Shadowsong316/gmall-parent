@@ -3,6 +3,8 @@ package com.atguigu.gmall.pms.service;
 import com.atguigu.gmall.pms.entity.Product;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Map;
+
 /**
  * <p>
  * 商品信息 服务类
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ProductService extends IService<Product> {
 
+    Map<String,Object> pageProduct(Integer pageSize, Integer pageNum);
 }

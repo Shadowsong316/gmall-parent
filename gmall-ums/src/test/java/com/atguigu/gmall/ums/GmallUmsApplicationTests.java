@@ -22,7 +22,7 @@ public class GmallUmsApplicationTests {
     @Test
     public void testwrite(){
         Role role = new Role();
-        role.setName("测试角色1");
+        role.setName("测试角色22");
         int insert = roleMapper.insert(role);
         System.out.println("数据插入完成.....");
     }
