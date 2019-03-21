@@ -4,7 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.atguigu.gmall.pms.entity.ProductCategory;
 import com.atguigu.gmall.pms.mapper.ProductCategoryMapper;
 import com.atguigu.gmall.pms.service.ProductCategoryService;
-import com.atguigu.gmall.vo.PmsProductCategoryWithChildrenItem;
+import com.atguigu.gmall.pms.vo.PmsProductCategoryWithChildrenItem;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;

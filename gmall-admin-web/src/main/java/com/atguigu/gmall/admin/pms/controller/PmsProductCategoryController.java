@@ -4,7 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.atguigu.gmall.admin.pms.vo.PmsProductCategoryParam;
 import com.atguigu.gmall.pms.service.ProductCategoryService;
 import com.atguigu.gmall.to.CommonResult;
-import com.atguigu.gmall.vo.PmsProductCategoryWithChildrenItem;
+import com.atguigu.gmall.pms.vo.PmsProductCategoryWithChildrenItem;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;

@@ -6,13 +6,16 @@ import com.atguigu.gmall.pms.entity.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 创建和修改商品时使用的参数
  */
 @Data
-public class PmsProductParam extends Product {
+public class PmsProductParam extends Product implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @ApiModelProperty("商品阶梯价格设置")
     private List<ProductLadder> productLadderList;
     @ApiModelProperty("商品满减价格设置")

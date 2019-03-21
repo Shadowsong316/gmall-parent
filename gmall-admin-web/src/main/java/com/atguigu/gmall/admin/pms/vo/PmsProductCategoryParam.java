@@ -6,13 +6,15 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 添加更新产品分类的参数
  */
 @Data
-public class PmsProductCategoryParam {
+public class PmsProductCategoryParam implements Serializable {
+    private static final long serialVersionUID = 1L;
     @ApiModelProperty("父分类的编号")
     private Long parentId;
     @ApiModelProperty(value = "商品分类名称",required = true)

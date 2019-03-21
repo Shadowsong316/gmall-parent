@@ -1,11 +1,10 @@
 package com.atguigu.gmall.admin.pms.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.atguigu.gmall.admin.pms.vo.PmsBrandParam;
 import com.atguigu.gmall.pms.entity.Brand;
 import com.atguigu.gmall.pms.service.BrandService;
 import com.atguigu.gmall.to.CommonResult;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.atguigu.gmall.pms.vo.PmsBrandParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
@@ -30,17 +29,19 @@ public class PmsBrandController {
     @GetMapping(value = "/listAll")
     public Object getList() {
 
-        //TODO 获取全部品牌列表  brandService.listAll()
-        return new CommonResult().success(null);
+        // 获取全部品牌列表
+        List<Brand> brandList=brandService.listAll();
+        return new CommonResult().success(brandList);
     }
 
     @ApiOperation(value = "添加品牌")
     @PostMapping(value = "/create")
-    public Object create(@Validated @RequestBody PmsBrandParam pmsBrand, BindingResult result) {
-        CommonResult commonResult = new CommonResult();
-        //TODO 添加品牌
-
-        return commonResult;
+    public Object create( @RequestBody PmsBrandParam pmsBrand, BindingResult result) {
+        // 添加品牌
+        System.out.println("pmsBrand"+pmsBrand);
+        boolean a = brandService.saveBrandParam(pmsBrand);
+        System.out.println(a);
+        return new CommonResult().success(a);
     }
 
     @ApiOperation(value = "更新品牌")

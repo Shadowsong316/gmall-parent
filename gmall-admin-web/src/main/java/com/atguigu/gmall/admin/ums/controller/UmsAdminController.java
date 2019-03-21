@@ -64,7 +64,7 @@ public class UmsAdminController {
 //            }
 //            return new CommonResult().validateFailed(result);
 //        }
-        int i=10/0;
+//        int i=10/0;
         return new CommonResult().success(admin);
     }
 

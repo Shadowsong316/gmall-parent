@@ -5,13 +5,16 @@ import com.atguigu.gmall.pms.entity.Brand;
 import com.atguigu.gmall.pms.mapper.BrandMapper;
 import com.atguigu.gmall.pms.service.BrandService;
 import com.atguigu.gmall.pms.util.SelectPageUtil;
+import com.atguigu.gmall.pms.vo.PmsBrandParam;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,4 +40,19 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
         Map<String, Object> map = SelectPageUtil.getStringObjectMap(pageSize, selectPage);
         return map;
     }
+
+    @Override
+    public List<Brand> listAll() {
+        return baseMapper.selectList(null);
+    }
+
+    @Override
+    public boolean saveBrandParam(PmsBrandParam pmsBrand) {
+        System.out.println(pmsBrand);
+        Brand brand = new Brand();
+        BeanUtils.copyProperties(pmsBrand,brand);
+        Integer result = baseMapper.insert(brand);
+        return null !=result &&result>0;
+    }
+
 }

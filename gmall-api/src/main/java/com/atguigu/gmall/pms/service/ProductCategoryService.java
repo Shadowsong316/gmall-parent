@@ -1,11 +1,10 @@
 package com.atguigu.gmall.pms.service;
 
 import com.atguigu.gmall.pms.entity.ProductCategory;
-import com.atguigu.gmall.vo.PmsProductCategoryWithChildrenItem;
+import com.atguigu.gmall.pms.vo.PmsProductCategoryWithChildrenItem;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
