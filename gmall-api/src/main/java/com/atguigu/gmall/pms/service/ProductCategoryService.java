@@ -5,6 +5,7 @@ import com.atguigu.gmall.pms.vo.PmsProductCategoryWithChildrenItem;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -17,4 +18,6 @@ import java.util.List;
 public interface ProductCategoryService extends IService<ProductCategory> {
 
     List<PmsProductCategoryWithChildrenItem> listWithChildren();
+
+    Map<String,Object> pageProductCategory(Integer pageNum, Integer pageSize, Long parentId);
 }

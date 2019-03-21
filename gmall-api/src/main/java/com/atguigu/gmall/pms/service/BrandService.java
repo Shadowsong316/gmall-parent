@@ -21,6 +21,5 @@ public interface BrandService extends IService<Brand> {
 
     List<Brand> listAll();
 
-
-    boolean saveBrandParam(PmsBrandParam pmsBrand);
+    void updateShowStatus(List<Long> ids, Integer showStatus);
 }

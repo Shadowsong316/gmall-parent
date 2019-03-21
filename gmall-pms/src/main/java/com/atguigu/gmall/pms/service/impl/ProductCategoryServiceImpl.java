@@ -4,14 +4,18 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.atguigu.gmall.pms.entity.ProductCategory;
 import com.atguigu.gmall.pms.mapper.ProductCategoryMapper;
 import com.atguigu.gmall.pms.service.ProductCategoryService;
+import com.atguigu.gmall.pms.util.SelectPageUtil;
 import com.atguigu.gmall.pms.vo.PmsProductCategoryWithChildrenItem;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -58,5 +62,13 @@ public class ProductCategoryServiceImpl extends ServiceImpl<ProductCategoryMappe
             ppcwci1.setChildren(children2);
         }
         return ppcwciList;
+    }
+
+    @Override
+    public Map<String, Object> pageProductCategory(Integer pageNum, Integer pageSize, Long parentId) {
+        QueryWrapper<ProductCategory> queryWrapper = new QueryWrapper<ProductCategory>().eq("parent_id", parentId);
+        IPage<ProductCategory> selectPage = baseMapper.selectPage(new Page<>(pageNum, pageSize), queryWrapper);
+        Map<String, Object> map = SelectPageUtil.getStringObjectMap(pageSize, selectPage);
+        return map;
     }
 }

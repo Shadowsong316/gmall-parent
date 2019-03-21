@@ -47,12 +47,14 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
     }
 
     @Override
-    public boolean saveBrandParam(PmsBrandParam pmsBrand) {
-        System.out.println(pmsBrand);
-        Brand brand = new Brand();
-        BeanUtils.copyProperties(pmsBrand,brand);
-        Integer result = baseMapper.insert(brand);
-        return null !=result &&result>0;
+    public void updateShowStatus(List<Long> ids, Integer showStatus) {
+        for (Long id : ids) {
+            Brand brand = new Brand();
+            brand.setId(id);
+            brand.setShowStatus(showStatus);
+            baseMapper.updateById(brand);
+        }
+
     }
 
 }
