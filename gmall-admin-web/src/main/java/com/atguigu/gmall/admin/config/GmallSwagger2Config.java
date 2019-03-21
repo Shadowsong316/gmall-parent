@@ -1,7 +1,7 @@
 package com.atguigu.gmall.admin.config;
 
+import com.google.common.base.Predicates;
 import io.swagger.annotations.Api;
-import org.apache.curator.shaded.com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -19,16 +19,34 @@ public class GmallSwagger2Config {
     @Bean("后台用户模块")
     public Docket userApis() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("后台用户模块")
-                .select()
-                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+//                .groupName("后台用户模块")
+//                .select()
+//                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
 //                .paths(PathSelectors.regex("/admin.*"))
-                .paths(PathSelectors.regex("/productCategory.*"))
-//                .paths(Predicates.and(PathSelectors.regex("/admin/.*")))
+//                .paths(PathSelectors.regex("/productCategory.*"))
+//                .paths(PathSelectors.regex("/productAttribute.*"))
+//                .paths(PathSelectors.regex("/memberLevel.*"))
+//                .paths(Predicates.and(PathSelectors.regex("/admin.*")))
+//                .paths(Predicates.and(PathSelectors.regex("/productAttribute.*")))
+//                .paths(Predicates.and(PathSelectors.regex("/memberLevel.*")))
 //                .paths(Predicates.and(PathSelectors.regex("/productCategory/.*")))
-                .build()
+//                .build()
+//                .apiInfo(apiInfo())
+//                .enable(true);
+//                .groupName("adminApi")
+//                .apiInfo(apiInfo())
+//                .select()
+////                .paths(Predicates.and(PathSelectors.regex("/admin.*")))
+////                .paths(Predicates.and(PathSelectors.regex("/productAttribute.*")))
+////                .paths(Predicates.and(PathSelectors.regex("/memberLevel.*")))
+//                .paths(Predicates.and(PathSelectors.regex("/prefrenceArea.*")))
+//                .build();
                 .apiInfo(apiInfo())
-                .enable(true);
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.atguigu.gmall.admin"))
+                .paths(PathSelectors.any())
+                .build();
+
     }
 
     private ApiInfo apiInfo() {

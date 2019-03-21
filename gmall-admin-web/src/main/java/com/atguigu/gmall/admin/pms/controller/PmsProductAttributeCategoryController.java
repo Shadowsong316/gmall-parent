@@ -8,11 +8,13 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 商品属性分类Controller
  * Created by atguigu 4/26.
  */
+@CrossOrigin
 @RestController
 @Api(tags = "PmsProductAttributeCategoryController", description = "商品属性分类管理")
 @RequestMapping("/productAttribute/category")
@@ -54,7 +56,8 @@ public class PmsProductAttributeCategoryController {
     @ResponseBody
     public Object getList(@RequestParam(defaultValue = "5") Integer pageSize, @RequestParam(defaultValue = "1") Integer pageNum) {
         //TODO 分页获取所有商品属性分类
-        return new CommonResult().success(null);
+        Map<String,Object> productAttributeCategoryPageInfo=productAttributeCategoryService.pageProductAttributeCategory(pageSize,pageNum);
+        return new CommonResult().success(productAttributeCategoryPageInfo);
     }
 
     @ApiOperation("获取所有商品属性分类及其下属性【难度较高】")
