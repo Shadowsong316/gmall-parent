@@ -1,4 +1,4 @@
-package com.atguigu.gmall.admin.pms.vo;
+package com.atguigu.gmall.vo;
 
 
 import com.atguigu.gmall.pms.entity.ProductCategory;
@@ -10,6 +10,7 @@ import java.util.List;
  */
 @Data
 public class PmsProductCategoryWithChildrenItem extends ProductCategory {
-    private List<ProductCategory> children;
+//    private List<ProductCategory> children;
+    private List<PmsProductCategoryWithChildrenItem> children;
 
 }

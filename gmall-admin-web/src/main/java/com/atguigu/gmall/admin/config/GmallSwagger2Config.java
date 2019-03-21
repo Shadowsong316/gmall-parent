@@ -1,6 +1,7 @@
 package com.atguigu.gmall.admin.config;
 
 import io.swagger.annotations.Api;
+import org.apache.curator.shaded.com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -21,7 +22,10 @@ public class GmallSwagger2Config {
                 .groupName("后台用户模块")
                 .select()
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
-                .paths(PathSelectors.regex("/admin.*"))
+//                .paths(PathSelectors.regex("/admin.*"))
+                .paths(PathSelectors.regex("/productCategory.*"))
+//                .paths(Predicates.and(PathSelectors.regex("/admin/.*")))
+//                .paths(Predicates.and(PathSelectors.regex("/productCategory/.*")))
                 .build()
                 .apiInfo(apiInfo())
                 .enable(true);
