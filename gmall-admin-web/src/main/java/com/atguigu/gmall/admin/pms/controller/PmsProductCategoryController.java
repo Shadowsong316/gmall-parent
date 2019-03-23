@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class PmsProductCategoryController {
                          BindingResult result) {
         // 添加产品分类
         ProductCategory productCategory = new ProductCategory();
-        BeanUtils.copyProperties(productCategoryParam,productCategory);
+        BeanUtils.copyProperties(productCategoryParam, productCategory);
         productCategoryService.save(productCategory);
         return new CommonResult().success(null);
     }
@@ -45,7 +46,7 @@ public class PmsProductCategoryController {
                          @RequestBody PmsProductCategoryParam productCategoryParam,
                          BindingResult result) {
         ProductCategory productCategory = new ProductCategory();
-        BeanUtils.copyProperties(productCategoryParam,productCategory);
+        BeanUtils.copyProperties(productCategoryParam, productCategory);
         productCategory.setId(id);
         productCategoryService.updateById(productCategory);
         // 修改商品分类
@@ -57,8 +58,8 @@ public class PmsProductCategoryController {
     public Object getList(@PathVariable Long parentId,
                           @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
                           @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        //TODO 分页查询商品分类
-        Map<String,Object> pageInfo=productCategoryService.pageProductCategory(pageNum,pageSize,parentId);
+        // 分页查询商品分类
+        Map<String, Object> pageInfo = productCategoryService.pageProductCategory(pageNum, pageSize, parentId);
         return new CommonResult().success(pageInfo);
     }
 
@@ -66,8 +67,8 @@ public class PmsProductCategoryController {
     @GetMapping(value = "/{id}")
     public Object getItem(@PathVariable Long id) {
         // 根据id获取商品分类
-        productCategoryService.getById(id);
-        return new CommonResult().success(null);
+        ProductCategory productCategory = productCategoryService.getById(id);
+        return new CommonResult().success(productCategory);
     }
 
     @ApiOperation("删除商品分类")
@@ -82,29 +83,24 @@ public class PmsProductCategoryController {
     @PostMapping(value = "/update/navStatus")
     public Object updateNavStatus(@RequestParam("ids") List<Long> ids, @RequestParam("navStatus") Integer navStatus) {
         // 修改导航栏显示状态
-        for (Long id : ids) {
-            ProductCategory productCategory = new ProductCategory().setId(id).setNavStatus(navStatus);
-            productCategoryService.updateById(productCategory);
-        }
-        return new CommonResult().success(null);
+        productCategoryService.updateNavStatus(ids, navStatus);
+        return new CommonResult().success("修改导航栏显示状态成功");
     }
 
     @ApiOperation("修改显示状态")
     @PostMapping(value = "/update/showStatus")
     public Object updateShowStatus(@RequestParam("ids") List<Long> ids, @RequestParam("showStatus") Integer showStatus) {
         // 修改显示状态
-        for (Long id : ids) {
-            ProductCategory productCategory = new ProductCategory().setId(id).setShowStatus(showStatus);
-            productCategoryService.updateById(productCategory);
-        }
-        return new CommonResult().success(null);
+        productCategoryService.updateShowStatus(ids, showStatus);
+        return new CommonResult().success("修改显示状态成功");
     }
 
     @ApiOperation("查询所有一级分类及子分类[有难度]")
     @GetMapping(value = "/list/withChildren")
     public Object listWithChildren() {
-        //TODO 查询所有一级分类及子分类
-        List<PmsProductCategoryWithChildrenItem> categoryWithChildren=productCategoryService.listWithChildren();
-        return new CommonResult().success(categoryWithChildren);
+        // 查询所有一级分类及子分类
+        //这个数据加缓存
+        List<PmsProductCategoryWithChildrenItem> items = productCategoryService.listWithChildren();
+        return new CommonResult().success(items);
     }
 }

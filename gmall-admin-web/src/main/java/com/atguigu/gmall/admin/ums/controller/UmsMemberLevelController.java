@@ -40,9 +40,9 @@ public class UmsMemberLevelController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public Object list(@RequestParam(value = "defaultStatus", defaultValue = "0") Integer defaultStatus) {
-        //TODO 获取会员等级列表
-        List<MemberLevel> memberLevelList = memberLevelService.listMemberLevel(defaultStatus);
-        return new CommonResult().success(memberLevelList);
+        // 获取会员等级列表
+        List<MemberLevel> items = memberLevelService.listMemberLevel(defaultStatus);
+        return new CommonResult().success(items);
     }
 }
 

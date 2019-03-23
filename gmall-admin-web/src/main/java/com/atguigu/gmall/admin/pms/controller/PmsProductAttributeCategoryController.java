@@ -51,18 +51,18 @@ public class PmsProductAttributeCategoryController {
     @ApiOperation("获取单个商品属性分类信息")
     @GetMapping(value = "/{id}")
     public Object getItem(@PathVariable Long id) {
-        //TODO 获取单个商品属性分类信息
-        productAttributeCategoryService.getById(id);
-        return new CommonResult().success(null);
+        // 获取单个商品属性分类信息
+        ProductAttributeCategory item = productAttributeCategoryService.getById(id);
+        return new CommonResult().success(item);
     }
 
     @ApiOperation("分页获取所有商品属性分类")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public Object getList(@RequestParam(defaultValue = "5") Integer pageSize, @RequestParam(defaultValue = "1") Integer pageNum) {
-        //TODO 分页获取所有商品属性分类
-        Map<String,Object> productAttributeCategoryPageInfo=productAttributeCategoryService.pageProductAttributeCategory(pageSize,pageNum);
-        return new CommonResult().success(productAttributeCategoryPageInfo);
+        // 分页获取所有商品属性分类
+        Map<String,Object> map=productAttributeCategoryService.pageProductAttributeCategory(pageSize,pageNum);
+        return new CommonResult().success(map);
     }
 
     @ApiOperation("获取所有商品属性分类及其下属性【难度较高】")
@@ -70,7 +70,7 @@ public class PmsProductAttributeCategoryController {
     @ResponseBody
     public Object getListWithAttr() {
         List<PmsProductAttributeCategoryItem> list=productAttributeCategoryService.listWithAttr();
-        //TODO 获取所有商品属性分类及其下属性
+        // 获取所有商品属性分类及其下属性
         return new CommonResult().success(list);
     }
 }

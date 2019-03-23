@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * sku库存Controller
  */
+@CrossOrigin
 @RestController
 @Api(tags = "PmsSkuStockController", description = "sku商品库存管理")
 @RequestMapping("/sku")
@@ -27,16 +28,16 @@ public class PmsSkuStockController {
     @RequestMapping(value = "/{pid}", method = RequestMethod.GET)
     @ResponseBody
     public Object getList(@PathVariable Long pid, @RequestParam(value = "keyword",required = false) String keyword) {
-
-        //TODO 根据商品编号及编号模糊搜索sku库存
-        return new CommonResult().success(null);
+        // 根据商品编号及编号模糊搜索sku库存
+        List<SkuStock> items=skuStockService.getList(pid,keyword);
+        return new CommonResult().success(items);
     }
     @ApiOperation("批量更新库存信息")
     @RequestMapping(value ="/update/{pid}",method = RequestMethod.POST)
     @ResponseBody
     public Object update(@PathVariable Long pid,@RequestBody List<SkuStock> skuStockList){
-
-        //TODO 批量更新库存信息
-        return new CommonResult().success(null);
+        // 批量更新库存信息
+        skuStockService.updateSkuStock(pid,skuStockList);
+        return new CommonResult().success("批量更新库存信息");
     }
 }

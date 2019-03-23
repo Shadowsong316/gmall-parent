@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,5 +60,32 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
         Map<String, Object> map = SelectPageUtil.getStringObjectMap(pageSize, selectPage);
         return map;
+    }
+
+    @Override
+    public List<Product> getList(String keyword) {
+        QueryWrapper<Product> queryWrapper = new QueryWrapper<Product>().like("keywords", keyword);
+        queryWrapper.or().like("brand_id", keyword);
+        return baseMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public void updateNewStatus(List<Long> ids, Integer newStatus) {
+        baseMapper.updateNewStatus(ids, newStatus);
+    }
+
+    @Override
+    public void updatePublishStatus(List<Long> ids, Integer publishStatus) {
+        baseMapper.updatePublishStatus(ids,publishStatus);
+    }
+
+    @Override
+    public void updateRecommendStatus(List<Long> ids, Integer recommendStatus) {
+        baseMapper.updateRecommendStatus(ids,recommendStatus);
+    }
+
+    @Override
+    public void updateDeleteStatus(List<Long> ids, Integer deleteStatus) {
+        baseMapper.updateDeleteStatus(ids,deleteStatus);
     }
 }

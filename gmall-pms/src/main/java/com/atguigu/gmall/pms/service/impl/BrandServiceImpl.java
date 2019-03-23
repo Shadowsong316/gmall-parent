@@ -48,13 +48,13 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
 
     @Override
     public void updateShowStatus(List<Long> ids, Integer showStatus) {
-        for (Long id : ids) {
-            Brand brand = new Brand();
-            brand.setId(id);
-            brand.setShowStatus(showStatus);
-            baseMapper.updateById(brand);
-        }
+            baseMapper.updateShowStatus(ids, showStatus);
 
+    }
+
+    @Override
+    public void updatefactoryStatus(List<Long> ids, Integer factoryStatus) {
+        baseMapper.updatefactoryStatus(ids, factoryStatus);
     }
 
 }

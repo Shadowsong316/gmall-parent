@@ -2,6 +2,9 @@ package com.atguigu.gmall.pms.mapper;
 
 import com.atguigu.gmall.pms.entity.ProductVertifyRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ProductVertifyRecordMapper extends BaseMapper<ProductVertifyRecord> {
 
+    void updateVerifyStatus(@Param("ids") List<Long> ids,@Param("verifyStatus") Integer verifyStatus,@Param("detail") String detail);
 }

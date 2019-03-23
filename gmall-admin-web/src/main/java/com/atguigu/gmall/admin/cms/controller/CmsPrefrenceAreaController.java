@@ -25,8 +25,8 @@ public class CmsPrefrenceAreaController {
     @ApiOperation("获取所有商品优选")
     @GetMapping(value = "/listAll")
     public Object listAll() {
-        List<PrefrenceArea> prefrenceAreaList = prefrenceAreaService.listAll();
+        List<PrefrenceArea> items = prefrenceAreaService.listAll();
         //TODO 获取所有商品优选
-        return new CommonResult().success(prefrenceAreaList);
+        return new CommonResult().success(items);
     }
 }

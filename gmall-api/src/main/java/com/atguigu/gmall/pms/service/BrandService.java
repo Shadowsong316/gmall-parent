@@ -22,4 +22,6 @@ public interface BrandService extends IService<Brand> {
     List<Brand> listAll();
 
     void updateShowStatus(List<Long> ids, Integer showStatus);
+
+    void updatefactoryStatus(List<Long> ids, Integer factoryStatus);
 }

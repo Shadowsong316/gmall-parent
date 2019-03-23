@@ -29,7 +29,7 @@ public class ProductAttributeServiceImpl extends ServiceImpl<ProductAttributeMap
     public Map<String, Object> pageProductAttribute(Long cid, Integer type, Integer pageSize, Integer pageNum) {
 
         IPage<ProductAttribute> selectPage = baseMapper.selectPage(new Page<ProductAttribute>(pageNum, pageSize),
-                new QueryWrapper<ProductAttribute>().eq("id",cid).eq("type", type));
+                new QueryWrapper<ProductAttribute>().eq("product_attribute_category_id",cid).eq("type", type));
         return SelectPageUtil.getStringObjectMap(pageSize, selectPage);
     }
 }

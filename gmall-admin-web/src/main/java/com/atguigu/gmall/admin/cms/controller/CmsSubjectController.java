@@ -27,8 +27,8 @@ public class CmsSubjectController {
     @GetMapping(value = "/listAll")
     public Object listAll() {
         // 获取全部商品专题
-        List<Subject> subjectList=subjectService.listAll();
-        return new CommonResult().success(subjectList);
+        List<Subject> items=subjectService.listAll();
+        return new CommonResult().success(items);
     }
 
     @ApiOperation(value = "根据专题名称分页获取专题")
@@ -36,6 +36,7 @@ public class CmsSubjectController {
     public Object getList(@RequestParam(value = "keyword", required = false) String keyword,
                           @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                           @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        //TODO
         return new CommonResult().success(null);
     }
 }

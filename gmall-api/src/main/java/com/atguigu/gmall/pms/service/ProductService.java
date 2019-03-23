@@ -4,6 +4,7 @@ import com.atguigu.gmall.pms.entity.Product;
 import com.atguigu.gmall.pms.vo.PmsProductQueryParam;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,4 +18,14 @@ import java.util.Map;
 public interface ProductService extends IService<Product> {
 
     Map<String,Object> pageProduct(PmsProductQueryParam productQueryParam, Integer pageSize, Integer pageNum);
+
+    List<Product> getList(String keyword);
+
+    void updateNewStatus(List<Long> ids, Integer newStatus);
+
+    void updatePublishStatus(List<Long> ids, Integer publishStatus);
+
+    void updateRecommendStatus(List<Long> ids, Integer recommendStatus);
+
+    void updateDeleteStatus(List<Long> ids, Integer deleteStatus);
 }

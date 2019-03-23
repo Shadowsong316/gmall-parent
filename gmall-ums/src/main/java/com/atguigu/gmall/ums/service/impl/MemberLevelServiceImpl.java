@@ -24,10 +24,6 @@ public class MemberLevelServiceImpl extends ServiceImpl<MemberLevelMapper, Membe
 
     @Override
     public List<MemberLevel> listMemberLevel(Integer defaultStatus) {
-        QueryWrapper<MemberLevel> queryWrapper=null;
-        if (defaultStatus!=null){
-            queryWrapper = new QueryWrapper<MemberLevel>().eq("default_status", defaultStatus);
-        }
-        return baseMapper.selectList(queryWrapper);
+        return baseMapper.selectList(new QueryWrapper<MemberLevel>().eq("default_status", defaultStatus));
     }
 }

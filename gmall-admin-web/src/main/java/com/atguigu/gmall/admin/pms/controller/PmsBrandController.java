@@ -113,12 +113,7 @@ public class PmsBrandController {
                                       @RequestParam("factoryStatus") Integer factoryStatus) {
         CommonResult commonResult = new CommonResult();
         // 批量更新厂家制造商状态
-        for (Long id : ids) {
-            Brand brand = new Brand();
-            brand.setId(id);
-            brand.setFactoryStatus(factoryStatus);
-            brandService.updateById(brand);
-        }
+        brandService.updatefactoryStatus(ids,factoryStatus);
         return commonResult.success("批量更新厂家制造商状态完成");
     }
 }

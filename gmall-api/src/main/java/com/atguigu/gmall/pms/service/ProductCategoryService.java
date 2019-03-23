@@ -20,4 +20,8 @@ public interface ProductCategoryService extends IService<ProductCategory> {
     List<PmsProductCategoryWithChildrenItem> listWithChildren();
 
     Map<String,Object> pageProductCategory(Integer pageNum, Integer pageSize, Long parentId);
+
+    void updateNavStatus(List<Long> ids, Integer navStatus);
+
+    void updateShowStatus(List<Long> ids, Integer showStatus);
 }
