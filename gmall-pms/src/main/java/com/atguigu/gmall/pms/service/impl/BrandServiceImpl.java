@@ -4,13 +4,11 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.atguigu.gmall.pms.entity.Brand;
 import com.atguigu.gmall.pms.mapper.BrandMapper;
 import com.atguigu.gmall.pms.service.BrandService;
-import com.atguigu.gmall.pms.util.SelectPageUtil;
-import com.atguigu.gmall.pms.vo.PmsBrandParam;
+import com.atguigu.gmall.util.SelectPageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

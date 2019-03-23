@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class GmallAdminWebApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(GmallAdminWebApplication.class, args);
     }
 

@@ -29,4 +29,5 @@
             (#{skuStock.id},#{skuStock.productId},#{skuStock.skuCode},#{skuStock.price},#{skuStock.stock},#{skuStock.lowStock},#{skuStock.sp1},#{skuStock.sp2},#{skuStock.sp3},#{skuStock.pic},#{skuStock.sale},#{skuStock.promotionPrice},#{skuStock.lockStock})
         </foreach>
     </insert>
+
 </mapper>

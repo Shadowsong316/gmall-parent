@@ -15,5 +15,11 @@
     <sql id="Base_Column_List">
         id, product_id, count, discount, price
     </sql>
+    <insert id="saveProductLadder">
+        INSERT INTO pms_product_ladder(id, product_id, count, discount,price)
+        VALUES<foreach collection="list" item="item" separator=",">
+        (#{item.id},#{item.productId},#{item.count},#{item.discount},#{item.price})
+    </foreach>
+    </insert>
 
 </mapper>

@@ -6,7 +6,7 @@ import com.atguigu.gmall.pms.entity.ProductAttributeCategory;
 import com.atguigu.gmall.pms.mapper.ProductAttributeCategoryMapper;
 import com.atguigu.gmall.pms.service.ProductAttributeCategoryService;
 import com.atguigu.gmall.pms.service.ProductAttributeService;
-import com.atguigu.gmall.pms.util.SelectPageUtil;
+import com.atguigu.gmall.util.SelectPageUtil;
 import com.atguigu.gmall.pms.vo.PmsProductAttributeCategoryItem;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

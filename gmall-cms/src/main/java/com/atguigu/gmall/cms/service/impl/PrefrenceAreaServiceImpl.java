@@ -4,7 +4,6 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.atguigu.gmall.cms.entity.PrefrenceArea;
 import com.atguigu.gmall.cms.mapper.PrefrenceAreaMapper;
 import com.atguigu.gmall.cms.service.PrefrenceAreaService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Component;
 

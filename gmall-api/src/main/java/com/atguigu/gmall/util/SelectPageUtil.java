@@ -1,4 +1,4 @@
-package com.atguigu.gmall.pms.util;
+package com.atguigu.gmall.util;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.stereotype.Component;

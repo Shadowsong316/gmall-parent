@@ -52,5 +52,10 @@
         </foreach>
 
     </update>
+    <update id="updateCountById">
+        UPDATE pms_product_category
+        SET product_count=product_count+1
+        WHERE id=#{id}
+    </update>
 
 </mapper>

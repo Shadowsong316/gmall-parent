@@ -1,7 +1,7 @@
 package com.atguigu.gmall.admin.pms.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.atguigu.gmall.admin.pms.vo.PmsProductParam;
+import com.atguigu.gmall.pms.vo.PmsProductParam;
 import com.atguigu.gmall.pms.entity.Product;
 import com.atguigu.gmall.pms.service.ProductService;
 import com.atguigu.gmall.pms.service.ProductVertifyRecordService;
@@ -9,9 +9,11 @@ import com.atguigu.gmall.pms.vo.PmsProductQueryParam;
 import com.atguigu.gmall.to.CommonResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -29,25 +31,28 @@ public class PmsProductController {
     private ProductVertifyRecordService productVertifyRecordService;
     @ApiOperation("创建商品")
     @PostMapping(value = "/create")
-    public Object create(@RequestBody PmsProductParam productParam,
+    public Object create(@Valid @RequestBody PmsProductParam productParam,
                          BindingResult bindingResult) {
         //TODO 创建商品
-        return new CommonResult().success(null);
+        productService.create(productParam);
+        return new CommonResult().success("创建商品成功");
     }
 
     @ApiOperation("根据商品id获取商品编辑信息")
     @GetMapping(value = "/updateInfo/{id}")
     public Object getUpdateInfo(@PathVariable Long id) {
         // 根据商品id获取商品编辑信息
-        Product product = productService.getById(id);
-        return new CommonResult().success(product);
+        PmsProductParam productParam = productService.getupdateInfoById(id);
+        return new CommonResult().success(productParam);
     }
 
     @ApiOperation("更新商品")
     @PostMapping(value = "/update/{id}")
     public Object update(@PathVariable Long id, @RequestBody PmsProductParam productParam, BindingResult bindingResult) {
         //TODO 更新商品
-        return new CommonResult().success(null);
+        productParam.setId(id);
+        productService.updateAllInfo(productParam);
+        return new CommonResult().success("更新商品");
     }
 
     @ApiOperation("查询商品")

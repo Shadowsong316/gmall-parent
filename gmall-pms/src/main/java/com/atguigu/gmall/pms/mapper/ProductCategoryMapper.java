@@ -22,4 +22,8 @@ public interface ProductCategoryMapper extends BaseMapper<ProductCategory> {
     void updateNavStatus(@Param("ids") List<Long> ids,@Param("navStatus") Integer navStatus);
 
     void updateShowStatus(@Param("ids") List<Long> ids,@Param("showStatus") Integer showStatus);
+
+    void updateCountById(Long id);
+
+
 }

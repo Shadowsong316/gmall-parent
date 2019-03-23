@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -36,7 +37,8 @@ public class CmsSubjectController {
     public Object getList(@RequestParam(value = "keyword", required = false) String keyword,
                           @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                           @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        //TODO
-        return new CommonResult().success(null);
+        //根据专题名称分页获取专题
+        Map<String,Object> map=subjectService.getList(keyword,pageNum,pageSize);
+        return new CommonResult().success(map);
     }
 }

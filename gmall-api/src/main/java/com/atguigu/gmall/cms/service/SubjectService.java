@@ -4,6 +4,7 @@ import com.atguigu.gmall.cms.entity.Subject;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -16,4 +17,6 @@ import java.util.List;
 public interface SubjectService extends IService<Subject> {
 
     List<Subject> listAll();
+
+    Map<String,Object> getList(String keyword, Integer pageNum, Integer pageSize);
 }

@@ -10,10 +10,5 @@ import org.springframework.util.DigestUtils;
 @SpringBootTest
 public class GmallAdminWebApplicationTests {
 
-    @Test
-    public void contextLoads() {
-        String asHex = DigestUtils.md5DigestAsHex("123456".getBytes());
-        System.out.println(asHex);
-    }
 
 }

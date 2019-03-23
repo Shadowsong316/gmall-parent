@@ -4,7 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.atguigu.gmall.pms.entity.ProductAttribute;
 import com.atguigu.gmall.pms.mapper.ProductAttributeMapper;
 import com.atguigu.gmall.pms.service.ProductAttributeService;
-import com.atguigu.gmall.pms.util.SelectPageUtil;
+import com.atguigu.gmall.util.SelectPageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

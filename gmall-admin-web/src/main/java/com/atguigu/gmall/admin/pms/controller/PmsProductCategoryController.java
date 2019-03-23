@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -92,6 +93,7 @@ public class PmsProductCategoryController {
     public Object updateShowStatus(@RequestParam("ids") List<Long> ids, @RequestParam("showStatus") Integer showStatus) {
         // 修改显示状态
         productCategoryService.updateShowStatus(ids, showStatus);
+
         return new CommonResult().success("修改显示状态成功");
     }
 
