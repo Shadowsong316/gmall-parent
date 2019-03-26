@@ -13,6 +13,7 @@
         <module name="gmall-mbg" />
         <module name="gmall-oms" />
         <module name="gmall-pms" />
+        <module name="gmall-search" />
         <module name="gmall-sms" />
         <module name="gmall-ums" />
         <module name="gmall-wms" />
@@ -27,6 +28,7 @@
       <module name="gmall-oms" target="1.8" />
       <module name="gmall-parent" target="1.8" />
       <module name="gmall-pms" target="1.8" />
+      <module name="gmall-search" target="1.8" />
       <module name="gmall-sms" target="1.8" />
       <module name="gmall-ums" target="1.8" />
       <module name="gmall-wms" target="1.8" />

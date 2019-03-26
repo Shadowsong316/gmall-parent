@@ -33,7 +33,7 @@ public class PmsProductController {
     @PostMapping(value = "/create")
     public Object create(@Valid @RequestBody PmsProductParam productParam,
                          BindingResult bindingResult) {
-        //TODO 创建商品
+        // 创建商品
         productService.create(productParam);
         return new CommonResult().success("创建商品成功");
     }
@@ -49,7 +49,7 @@ public class PmsProductController {
     @ApiOperation("更新商品")
     @PostMapping(value = "/update/{id}")
     public Object update(@PathVariable Long id, @RequestBody PmsProductParam productParam, BindingResult bindingResult) {
-        //TODO 更新商品
+        // 更新商品
         productParam.setId(id);
         productService.updateAllInfo(productParam);
         return new CommonResult().success("更新商品");

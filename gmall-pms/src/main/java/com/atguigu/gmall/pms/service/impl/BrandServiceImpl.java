@@ -32,7 +32,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, Brand> implements
         QueryWrapper<Brand> queryWrapper=null;
         if (!StringUtils.isEmpty(keyword)) {
             queryWrapper = new QueryWrapper<Brand>().like("name", keyword)
-                    .eq("first_letter", keyword);
+                    .or().eq("first_letter", keyword);
         }
         IPage<Brand> selectPage = baseMapper.selectPage(new Page<Brand>(pageNum, pageSize), queryWrapper);
         Map<String, Object> map = SelectPageUtil.getStringObjectMap(pageSize, selectPage);
