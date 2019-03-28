@@ -196,7 +196,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
     //========================================商品上架完成-ES检索===================================
 
-    //========================================保存商品全部信息===================================
+    //========================================保存商品全部信息到数据库===================================
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void create(PmsProductParam productParam) {
