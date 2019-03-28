@@ -2,17 +2,17 @@ package com.atguigu.gmall.pms.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-public class jedisPoolConfig {
 
-    /**
-     * JedisConnectionFactory factory 这个参数是从容器中自动获取的
-     * @param factory
-     * @return 将我们做好的 JedisPool 放在容器中
-     */
+@Configuration
+public class GmallJedisConfiguration {
+
+
     @Value("${spring.redis.host:127.0.0.1}")
     private String host;
     @Value("${spring.redis.port:6379}")
@@ -30,7 +30,7 @@ public class jedisPoolConfig {
     @Value("${spring.redis.jedis.pool.max-idle:8}")
     private Integer maxIdle;
 
-    @Value("${spring.redis.jedis.pool.total:100}")
+    @Value("${spring.redis.jedis.pool.total:8}")
     private Integer maxTotal;
 
     @Value("${spring.redis.jedis.pool.min-idle:0}")
@@ -54,6 +54,9 @@ public class jedisPoolConfig {
 
         return jedisPool;
     }
+
+
+
 
 
 }
