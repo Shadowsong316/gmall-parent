@@ -40,17 +40,14 @@ public class GmallSearchServiceImpl implements GmallSearchService {
 
     @Override
     public boolean saveProductInfoToEs(EsProduct esProduct) {
-        Index build = new Index.Builder(esProduct).index(EsConstant.ES_PRODUCT_INDEX).type(EsConstant.ES_PRODUCT_TYPE)
-                .id(esProduct.getId().toString()).build();
-        DocumentResult execute = null;
+        Index index = new Index.Builder(esProduct).index(EsConstant.ES_PRODUCT_INDEX).type(EsConstant.ES_PRODUCT_TYPE).build();
+        DocumentResult result = null;
         try {
-            execute = jestClient.execute(build);
+            result = jestClient.execute(index);
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
         }
-        return execute.isSucceeded();
-
+        return result.isSucceeded();
     }
 
     @Override
@@ -152,23 +149,23 @@ public class GmallSearchServiceImpl implements GmallSearchService {
                                 .must(QueryBuilders.termsQuery("attrValueList.productAttributeId", productAttrId))
                                 .must(QueryBuilders.termsQuery("attrValueList.value", productAttrValue)), ScoreMode.None));
                 //过滤属性
-                boolQuery.filter(QueryBuilders.nestedQuery("attrValueList",must, ScoreMode.None));
+                boolQuery.filter(QueryBuilders.nestedQuery("attrValueList", must, ScoreMode.None));
             }
         }
         String[] props = param.getProps();
-        if (props!=null){
+        if (props != null) {
             for (String prop : props) {
                 String values = prop.split(":")[1];
                 String[] split = values.split("-");
-                QueryBuilders.boolQuery().must(QueryBuilders.termQuery("attrValueList.productAttributeId",prop.split(":")[0]))
-                        .must(QueryBuilders.termsQuery("attrValueList.value",split));
+                QueryBuilders.boolQuery().must(QueryBuilders.termQuery("attrValueList.productAttributeId", prop.split(":")[0]))
+                        .must(QueryBuilders.termsQuery("attrValueList.value", split));
             }
         }
         //价格区间过滤
-        if(param.getPriceFrom()!=null){
+        if (param.getPriceFrom() != null) {
             boolQuery.filter(QueryBuilders.rangeQuery("price").gte(param.getPriceFrom()));
         }
-        if(param.getPriceTo()!=null){
+        if (param.getPriceTo() != null) {
             boolQuery.filter(QueryBuilders.rangeQuery("price").lte(param.getPriceTo()));
         }
         searchSource.query(boolQuery);
@@ -206,17 +203,17 @@ public class GmallSearchServiceImpl implements GmallSearchService {
         searchSource.from((param.getPageNum() - 1) * param.getPageSize());
         searchSource.size(param.getPageSize());
         //5 排序
-        if (!StringUtils.isEmpty(param.getOrder())){
+        if (!StringUtils.isEmpty(param.getOrder())) {
             String order = param.getOrder();
             String type = order.split(":")[0];
             String asc = order.split(":")[1];
-            if ("0".equals(type)){
+            if ("0".equals(type)) {
                 searchSource.sort(SortBuilders.scoreSort().order(SortOrder.fromString(asc)));
             }
-            if ("1".equals(type)){
+            if ("1".equals(type)) {
                 searchSource.sort(SortBuilders.fieldSort("sale").order(SortOrder.fromString(asc)));
             }
-            if ("2".equals(type)){
+            if ("2".equals(type)) {
                 searchSource.sort(SortBuilders.fieldSort("price").order(SortOrder.fromString(asc)));
             }
 //            if ("3".equals(type)){
