@@ -37,7 +37,7 @@ import java.util.List;
 public class GmallSearchServiceImpl implements GmallSearchService {
     @Autowired
     private JestClient jestClient;
-
+/*************************************新增商品全部信息到ES 商品上架**********************************************/
     @Override
     public boolean saveProductInfoToEs(EsProduct esProduct) {
         Index build = new Index.Builder(esProduct).index(EsConstant.ES_PRODUCT_INDEX).type(EsConstant.ES_PRODUCT_TYPE)
@@ -52,7 +52,7 @@ public class GmallSearchServiceImpl implements GmallSearchService {
         return execute.isSucceeded();
 
     }
-
+    /*************************************在ES中查询商品信息**********************************************/
     @Override
     public SearchResponse searchProduct(SearchParam param) throws IOException {
         //1.根据页面传递的参数构建检索的DSL语句
@@ -64,7 +64,7 @@ public class GmallSearchServiceImpl implements GmallSearchService {
         SearchResponse response = buildSearchResult(result);
         return response;
     }
-
+    /*************************************封装和分析查询结果**********************************************/
     private SearchResponse buildSearchResult(SearchResult result) {
         System.out.println(result.getTotal() + "==>" + result.toString());
         SearchResponse response = new SearchResponse();
@@ -121,8 +121,9 @@ public class GmallSearchServiceImpl implements GmallSearchService {
         });
         return response;
     }
+    /*************************************封装和分析查询结果完成**********************************************/
 
-
+    /*************************************根据页面传递的参数构建检索的DSL语句**********************************************/
     private String buildSearchDsl(SearchParam param) {
         SearchSourceBuilder searchSource = new SearchSourceBuilder();
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
@@ -230,4 +231,6 @@ public class GmallSearchServiceImpl implements GmallSearchService {
         System.out.println(searchSource.toString());
         return searchSource.toString();
     }
+    /*************************************根据页面传递的参数构建检索的DSL语句完成**********************************************/
+
 }
