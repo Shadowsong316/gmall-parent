@@ -209,12 +209,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         proxy.updateProductCategoryCount();
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveBaseProductInfo(PmsProductParam productParam) {
-        ProductServiceImpl psProxy = (ProductServiceImpl) AopContext.currentProxy();
-        psProxy.saveProduct(productParam);
-        psProxy.saveSkuStock(productParam.getSkuStockList());
-    }
+
 
     //     1保存商品基本信息
     @Transactional(propagation = Propagation.REQUIRED)
