@@ -1,6 +1,7 @@
 package com.atguigu.gmall.pms.mapper;
 
 import com.atguigu.gmall.pms.entity.Product;
+import com.atguigu.gmall.to.es.EsProductAttributeValue;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,4 +24,8 @@ public interface ProductMapper extends BaseMapper<Product> {
     void updateRecommendStatus(@Param("ids")List<Long> ids,@Param("recommendStatus") Integer recommendStatus);
 
     void updateDeleteStatus(@Param("ids")List<Long> ids,@Param("deleteStatus") Integer deleteStatus);
+
+    List<EsProductAttributeValue> getProductSaleAttr(Long productId);
+
+    List<EsProductAttributeValue> getProductBaseAttr(Long productId);
 }

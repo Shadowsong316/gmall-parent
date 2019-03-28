@@ -3,6 +3,7 @@ package com.atguigu.gmall.pms.service;
 import com.atguigu.gmall.pms.entity.*;
 import com.atguigu.gmall.pms.vo.PmsProductParam;
 import com.atguigu.gmall.pms.vo.PmsProductQueryParam;
+import com.atguigu.gmall.to.es.EsProductAttributeValue;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -61,4 +62,9 @@ public interface ProductService extends IService<Product> {
     void updateProductAttributeValue(List<ProductAttributeValue> list);
 
 
+    List<EsProductAttributeValue> getProductSaleAttr(Long productId);
+
+    List<EsProductAttributeValue> getProductBaseAttr(Long productId);
+
+    Product getProductByIdFromCache(Long productId);
 }

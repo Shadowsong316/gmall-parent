@@ -10,9 +10,11 @@
         <module name="gmall-api" />
         <module name="gmall-cms" />
         <module name="gmall-common" />
+        <module name="gmall-item" />
         <module name="gmall-mbg" />
         <module name="gmall-oms" />
         <module name="gmall-pms" />
+        <module name="gmall-portal-web" />
         <module name="gmall-search" />
         <module name="gmall-sms" />
         <module name="gmall-ums" />
@@ -24,10 +26,12 @@
       <module name="gmall-api" target="1.8" />
       <module name="gmall-cms" target="1.8" />
       <module name="gmall-common" target="1.8" />
+      <module name="gmall-item" target="1.8" />
       <module name="gmall-mbg" target="1.8" />
       <module name="gmall-oms" target="1.8" />
       <module name="gmall-parent" target="1.8" />
       <module name="gmall-pms" target="1.8" />
+      <module name="gmall-portal-web" target="1.8" />
       <module name="gmall-search" target="1.8" />
       <module name="gmall-sms" target="1.8" />
       <module name="gmall-ums" target="1.8" />

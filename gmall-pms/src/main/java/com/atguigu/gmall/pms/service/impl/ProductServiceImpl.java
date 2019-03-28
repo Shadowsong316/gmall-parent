@@ -1,12 +1,18 @@
 package com.atguigu.gmall.pms.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.atguigu.gmall.cms.entity.PrefrenceAreaProductRelation;
 import com.atguigu.gmall.cms.entity.SubjectProductRelation;
+import com.atguigu.gmall.pms.constant.RedisCacheConstant;
 import com.atguigu.gmall.pms.entity.*;
 import com.atguigu.gmall.pms.mapper.*;
 import com.atguigu.gmall.pms.service.*;
 import com.atguigu.gmall.pms.vo.PmsProductParam;
+import com.atguigu.gmall.search.GmallSearchService;
+import com.atguigu.gmall.to.es.EsProduct;
+import com.atguigu.gmall.to.es.EsProductAttributeValue;
 import com.atguigu.gmall.util.SelectPageUtil;
 import com.atguigu.gmall.pms.vo.PmsProductQueryParam;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -21,6 +27,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.util.List;
 import java.util.Map;
@@ -61,6 +69,12 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private MemberPriceService memberPriceService;
     @Autowired
     private ProductAttributeValueService productAttributeValueService;
+    @Reference(version = "1.0")
+    private GmallSearchService searchService;
+    @Autowired
+    private JedisPool jedisPool;
+    @Autowired
+    private ProductMapper productMapper;
 //    @Autowired
 //    private ProductCategoryService productCategoryService;
 
@@ -111,7 +125,67 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     public void updatePublishStatus(List<Long> ids, Integer publishStatus) {
-        baseMapper.updatePublishStatus(ids, publishStatus);
+        if (publishStatus == 1) {
+            publishProduct(ids);
+        } else {
+            removeProduct(ids);
+        }
+    }
+
+    //商品上架
+    private void publishProduct(List<Long> ids) {
+        //1、查当前需要上架的商品的sku信息和spu信息
+        ids.forEach(id -> {
+            //1）、SPU
+            Product product = baseMapper.selectById(id);
+            //2）、需要上架的SKU
+            List<SkuStock> skuStockList = skuStockMapper.selectList(new QueryWrapper<SkuStock>().eq("product_id", id));
+            //3）、这个商品所有的参数值
+            List<EsProductAttributeValue> attributeValueList = productAttributeValueMapper.selectAttributeValues(id);
+
+            //4）、改写信息，将其发布到es；统计上架状态是否全部完成
+            AtomicReference<Integer> count = new AtomicReference<>(0);
+            skuStockList.forEach(sku -> {
+                EsProduct esProduct = new EsProduct();
+                //5）改写商品的标题，加上sku的销售属性
+                BeanUtils.copyProperties(product, esProduct);
+                esProduct.setName(product.getName() + " " + sku.getSp1() + " " + sku.getSp2() + " " + sku.getSp3());
+                esProduct.setPrice(sku.getPrice());
+                esProduct.setStock(sku.getStock());
+//            esProduct.setPic(sku.getPic());
+                esProduct.setSale(sku.getSale());
+                esProduct.setAttrValueList(attributeValueList);
+                //6）、改写id，使用sku的id
+                esProduct.setId(sku.getId());
+                //7)、保存到es中；//5个成了3个败了。不成
+                boolean result = searchService.saveProductInfoToEs(esProduct);
+                count.set(count.get()+1);
+                if (result) {
+                    //保存当前的id，list.add(id);
+
+                }
+
+            });
+            //8）、判断是否完全上架成功，成功改数据库状态
+            if (count.get()==skuStockList.size()){
+                //9）、修改数据库状态;都是包装类型允许null值
+
+                Product product1 = new Product();
+                product1.setId(id);
+                product1.setPublishStatus(1);
+                productMapper.updateById(product1);
+            }else{
+                //9）、成功的撤销操作；来保证业务数据的一致性；
+                //es有失败  list.forEach(remove());
+
+            }
+        });
+
+
+    }
+
+    private void removeProduct(List<Long> ids) {
+
     }
 
     @Override
@@ -123,7 +197,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public void updateDeleteStatus(List<Long> ids, Integer deleteStatus) {
         baseMapper.updateDeleteStatus(ids, deleteStatus);
     }
-
 
 
     @Override//保存商品全部信息，调用下面的方法
@@ -306,6 +379,36 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateProductAttributeValue(List<ProductAttributeValue> list) {
         productAttributeValueService.updateBatchById(list);
+    }
+
+    @Override
+    public List<EsProductAttributeValue> getProductSaleAttr(Long productId) {
+        return baseMapper.getProductSaleAttr(productId);
+    }
+
+    @Override
+    public List<EsProductAttributeValue> getProductBaseAttr(Long productId) {
+        return baseMapper.getProductBaseAttr(productId);
+    }
+
+    @Override
+    public Product getProductByIdFromCache(Long productId) {
+        Jedis jedis = jedisPool.getResource();
+        //先去缓存中检索
+        Product product=null;
+        String s = jedis.get(RedisCacheConstant.PRODUCT_INFO_CACHE_KEY + productId);
+        if (StringUtils.isEmpty(s)){
+            //缓存中没有去找数据库
+            product = baseMapper.selectById(productId);
+            //放入缓存
+            String jsonString = JSON.toJSONString(product);
+            jedis.set(RedisCacheConstant.PRODUCT_INFO_CACHE_KEY + productId,jsonString);
+        }else {
+            //缓存中有
+            JSON.parseObject(s,Product.class);
+        }
+        jedis.close();
+        return product;
     }
 
 

@@ -32,4 +32,10 @@ public class SkuStockServiceImpl extends ServiceImpl<SkuStockMapper, SkuStock> i
     public void updateSkuStock(Long pid, List<SkuStock> skuStockList) {
         baseMapper.updateSkuStock(pid,skuStockList);
     }
+
+    @Override
+    public List<SkuStock> getAllSkuInfoByProductId(Long productId) {
+
+        return baseMapper.selectList(new QueryWrapper<SkuStock>().eq("product_id",productId));
+    }
 }

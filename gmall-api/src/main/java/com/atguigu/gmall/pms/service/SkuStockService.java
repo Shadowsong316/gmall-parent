@@ -18,4 +18,6 @@ public interface SkuStockService extends IService<SkuStock> {
     List<SkuStock> getList(Long pid, String keyword);
 
     void updateSkuStock(Long pid, List<SkuStock> skuStockList);
+
+    List<SkuStock> getAllSkuInfoByProductId(Long productId);
 }
