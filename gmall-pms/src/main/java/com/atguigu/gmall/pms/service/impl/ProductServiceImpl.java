@@ -123,7 +123,16 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public void updateNewStatus(List<Long> ids, Integer newStatus) {
         baseMapper.updateNewStatus(ids, newStatus);
     }
+    @Override
+    public void updateRecommendStatus(List<Long> ids, Integer recommendStatus) {
+        baseMapper.updateRecommendStatus(ids, recommendStatus);
+    }
 
+    @Override
+    public void updateDeleteStatus(List<Long> ids, Integer deleteStatus) {
+        baseMapper.updateDeleteStatus(ids, deleteStatus);
+    }
+    //========================================商品上架开始-ES检索===================================
     @Override
     public void updatePublishStatus(List<Long> ids, Integer publishStatus) {
         if (publishStatus == 1) {
@@ -133,7 +142,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
     }
 
-    //商品上架
     private void publishProduct(List<Long> ids) {
         //1、查当前需要上架的商品的sku信息和spu信息
         ids.forEach(id -> {
@@ -181,26 +189,15 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
             }
         });
-
-
     }
 
     private void removeProduct(List<Long> ids) {
 
     }
+    //========================================商品上架完成-ES检索===================================
 
+    //========================================保存商品全部信息===================================
     @Override
-    public void updateRecommendStatus(List<Long> ids, Integer recommendStatus) {
-        baseMapper.updateRecommendStatus(ids, recommendStatus);
-    }
-
-    @Override
-    public void updateDeleteStatus(List<Long> ids, Integer deleteStatus) {
-        baseMapper.updateDeleteStatus(ids, deleteStatus);
-    }
-
-
-    @Override//保存商品全部信息，调用下面的方法
     @Transactional(propagation = Propagation.REQUIRED)
     public void create(PmsProductParam productParam) {
         ProductServiceImpl proxy = (ProductServiceImpl) AopContext.currentProxy();
@@ -303,7 +300,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         Long id = product.getProductCategoryId();
         productCategoryMapper.updateCountById(id);
     }
+    //========================================保存商品全部信息完成===================================
 
+    //========================================查询===================================
     @Override//查询所有信息
     public PmsProductParam getupdateInfoById(Long id) {
         Product product = baseMapper.selectById(id);
@@ -321,7 +320,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         productParam.setProductAttributeValueList(productAttributeValue);
         return productParam;
     }
+    //========================================查询完成===================================
 
+    //========================================更新===================================
     @Transactional(propagation = Propagation.REQUIRED)
     @Override//大更新所有信息
     public void updateAllInfo(PmsProductParam productParam) {
@@ -379,7 +380,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public void updateProductAttributeValue(List<ProductAttributeValue> list) {
         productAttributeValueService.updateBatchById(list);
     }
-
+    //========================================更新完成===================================
     @Override
     public List<EsProductAttributeValue> getProductSaleAttr(Long productId) {
         return baseMapper.getProductSaleAttr(productId);
@@ -389,7 +390,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public List<EsProductAttributeValue> getProductBaseAttr(Long productId) {
         return baseMapper.getProductBaseAttr(productId);
     }
-
+    //========================================分布式锁获取商品详情===================================
     @Override
     public Product getProductByIdFromCache(Long productId) {
         /*问题：
