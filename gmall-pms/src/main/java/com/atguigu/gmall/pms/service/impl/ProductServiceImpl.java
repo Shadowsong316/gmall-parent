@@ -32,6 +32,7 @@ import redis.clients.jedis.JedisPool;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -159,7 +160,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 esProduct.setId(sku.getId());
                 //7)、保存到es中；//5个成了3个败了。不成
                 boolean result = searchService.saveProductInfoToEs(esProduct);
-                count.set(count.get()+1);
+                count.set(count.get() + 1);
                 if (result) {
                     //保存当前的id，list.add(id);
 
@@ -167,14 +168,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
             });
             //8）、判断是否完全上架成功，成功改数据库状态
-            if (count.get()==skuStockList.size()){
+            if (count.get() == skuStockList.size()) {
                 //9）、修改数据库状态;都是包装类型允许null值
 
                 Product product1 = new Product();
                 product1.setId(id);
                 product1.setPublishStatus(1);
                 productMapper.updateById(product1);
-            }else{
+            } else {
                 //9）、成功的撤销操作；来保证业务数据的一致性；
                 //es有失败  list.forEach(remove());
 
@@ -367,8 +368,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public void updateProductFullReduction(List<ProductFullReduction> list) {
         productFullReductionService.updateBatchById(list);
     }
-
-
     @Override//4修改商品会员价格设置
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateMemberPrice(List<MemberPrice> list) {
@@ -393,23 +392,44 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     public Product getProductByIdFromCache(Long productId) {
+        /*问题：
+               1）、执行业务中途出现问题（代码问题，机器问题），导致没有运行到删锁。所有人都获取不到锁怎么办？
+               2）、执行业务时间太长。让别人等的太久，优化？*/
         Jedis jedis = jedisPool.getResource();
-        //先去缓存中检索
-        Product product=null;
+        //1-先去缓存中检索
+        Product product = null;
         String s = jedis.get(RedisCacheConstant.PRODUCT_INFO_CACHE_KEY + productId);
-        if (StringUtils.isEmpty(s)){
-            //缓存中没有去找数据库
-            product = baseMapper.selectById(productId);
-            //放入缓存
-            String jsonString = JSON.toJSONString(product);
-            jedis.set(RedisCacheConstant.PRODUCT_INFO_CACHE_KEY + productId,jsonString);
-        }else {
+        if (StringUtils.isEmpty(s)) {
+            //2-缓存中没有去找数据库
+            //trylock
+            //3-去redis中占坑
+            Long lock = jedis.setnx("lock", "123");
+            if (lock == 1) {
+                product = baseMapper.selectById(productId);
+                //放入缓存
+                String jsonString = JSON.toJSONString(product);
+                if (product==null){//无论数据库是否有值，都应该放入缓存，防止穿透
+                    int anInt = new Random().nextInt(2000);//随机过期时间
+                    jedis.setex(RedisCacheConstant.PRODUCT_INFO_CACHE_KEY+productId,60+anInt,jsonString);
+                }else {
+                    int anInt = new Random().nextInt(2000);//随机过期时间
+                    jedis.setex(RedisCacheConstant.PRODUCT_INFO_CACHE_KEY + productId,60*60*24*3+anInt,jsonString);
+                }
+                jedis.del("lock");
+            } else {
+                try {
+                    Thread.sleep(1000);
+                    //如果没有获取到锁去查数据库，我们等待一会，再去缓存看
+                    getProductByIdFromCache(productId);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
             //缓存中有
-            JSON.parseObject(s,Product.class);
+            JSON.parseObject(s, Product.class);
         }
         jedis.close();
         return product;
     }
-
-
 }
