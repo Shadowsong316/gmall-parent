@@ -57,7 +57,7 @@ public class GmallSearchServiceImpl implements GmallSearchService {
     public SearchResponse searchProduct(SearchParam param) throws IOException {
         //1.根据页面传递的参数构建检索的DSL语句
         String queryDSL = buildSearchDsl(param);
-        Search search = new Search.Builder(queryDSL).build();
+        Search search = new Search.Builder(queryDSL).addIndex("gulishop").addType("product").build();
         //2.执行查询
         SearchResult result = jestClient.execute(search);
         //3.封装和分析查询结果
