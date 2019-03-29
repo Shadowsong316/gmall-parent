@@ -58,10 +58,13 @@ public class GmallSearchServiceImpl implements GmallSearchService {
     @Override
     public SearchResponse searchProduct(SearchParam param) throws IOException {
         String queryDSL=buildSearchDSL(param);
-        Search search = new Search.Builder("").build();
+        Search search = new Search.Builder(queryDSL).addIndex("gulishop").addType("product").build();
         SearchResult result = jestClient.execute(search);
         SearchResponse response=buildSearchResult(result);
         //分装分页信息
+        response.setTotal(result.getTotal());
+        response.setPageNum(param.getPageNum());
+        response.setPageSize(param.getPageSize());
         return response;
     }
     /*************************************在ES中查询商品信息**********************************************/
@@ -162,6 +165,7 @@ public class GmallSearchServiceImpl implements GmallSearchService {
         });
         //2添加属性集合
         MetricAggregation aggregations = result.getAggregations();
+        System.out.println(result);
         //2.1获取品牌
         SearchResponseAttrVo brand = new SearchResponseAttrVo();
         brand.setName("品牌");
