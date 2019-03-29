@@ -29,10 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.params.SetParams;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -123,6 +122,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public void updateNewStatus(List<Long> ids, Integer newStatus) {
         baseMapper.updateNewStatus(ids, newStatus);
     }
+
     @Override
     public void updateRecommendStatus(List<Long> ids, Integer recommendStatus) {
         baseMapper.updateRecommendStatus(ids, recommendStatus);
@@ -132,6 +132,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public void updateDeleteStatus(List<Long> ids, Integer deleteStatus) {
         baseMapper.updateDeleteStatus(ids, deleteStatus);
     }
+
     //========================================商品上架开始-ES检索===================================
     @Override
     public void updatePublishStatus(List<Long> ids, Integer publishStatus) {
@@ -369,6 +370,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public void updateProductFullReduction(List<ProductFullReduction> list) {
         productFullReductionService.updateBatchById(list);
     }
+
     @Override//4修改商品会员价格设置
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateMemberPrice(List<MemberPrice> list) {
@@ -380,6 +382,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public void updateProductAttributeValue(List<ProductAttributeValue> list) {
         productAttributeValueService.updateBatchById(list);
     }
+
     //========================================更新完成===================================
     @Override
     public List<EsProductAttributeValue> getProductSaleAttr(Long productId) {
@@ -390,6 +393,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public List<EsProductAttributeValue> getProductBaseAttr(Long productId) {
         return baseMapper.getProductBaseAttr(productId);
     }
+
     //========================================分布式锁获取商品详情===================================
     @Override
     public Product getProductByIdFromCache(Long productId) {
@@ -404,19 +408,37 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             //2-缓存中没有去找数据库
             //trylock
             //3-去redis中占坑
-            Long lock = jedis.setnx("lock", "123");
-            if (lock == 1) {
-                product = baseMapper.selectById(productId);
-                //放入缓存
-                String jsonString = JSON.toJSONString(product);
-                if (product==null){//无论数据库是否有值，都应该放入缓存，防止穿透
-                    int anInt = new Random().nextInt(2000);//随机过期时间
-                    jedis.setex(RedisCacheConstant.PRODUCT_INFO_CACHE_KEY+productId,60+anInt,jsonString);
-                }else {
-                    int anInt = new Random().nextInt(2000);//随机过期时间
-                    jedis.setex(RedisCacheConstant.PRODUCT_INFO_CACHE_KEY + productId,60*60*24*3+anInt,jsonString);
+            String token = UUID.randomUUID().toString();
+            /**
+             * 分布式锁：要被锁住的所有线程，可以去分布式缓存中同时占一个坑
+             * 原子操作：加锁、解锁都要原子操作
+             */
+            String lock = jedis.set("lock", token, SetParams.setParams().ex(5).nx());
+            if (!StringUtils.isEmpty(lock) && "ok".equalsIgnoreCase(lock)) {
+                try {
+
+                    product = baseMapper.selectById(productId);
+                    //放入缓存
+                    String jsonString = JSON.toJSONString(product);
+                    if (product == null) {//无论数据库是否有值，都应该放入缓存，防止穿透
+                        int anInt = new Random().nextInt(2000);//随机过期时间
+                        jedis.setex(RedisCacheConstant.PRODUCT_INFO_CACHE_KEY + productId, 60 + anInt, jsonString);
+                    } else {
+                        int anInt = new Random().nextInt(2000);//随机过期时间
+                        jedis.setex(RedisCacheConstant.PRODUCT_INFO_CACHE_KEY + productId, 60 * 60 * 24 * 3 + anInt, jsonString);
+                    }
+                } finally {
+                    /*删锁的问题，如果由于业务超出的锁的自动删除时间；我们直接按照key删除锁。会导致删掉别人的锁
+                    if(token.equals(jedis.get("lock"))){
+                        //这样有没有问题？判断是相等，但是正好锁过期？数值正在网络传输中锁过期了怎么办？
+                        //比较与删除也应该原子操作
+                        //脚本删除锁  lua
+                        jedis.del("lock");
+                    }*/
+                    String script =
+                            "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+                    jedis.eval(script, Collections.singletonList("lock"), Collections.singletonList(token));
                 }
-                jedis.del("lock");
             } else {
                 try {
                     Thread.sleep(1000);
@@ -428,7 +450,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             }
         } else {
             //缓存中有
-            JSON.parseObject(s, Product.class);
+            product = JSON.parseObject(s, Product.class);
         }
         jedis.close();
         return product;

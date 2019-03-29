@@ -19,6 +19,7 @@
         <module name="gmall-sms" />
         <module name="gmall-ums" />
         <module name="gmall-wms" />
+        <module name="redis-test" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
@@ -36,6 +37,7 @@
       <module name="gmall-sms" target="1.8" />
       <module name="gmall-ums" target="1.8" />
       <module name="gmall-wms" target="1.8" />
+      <module name="redis-test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
