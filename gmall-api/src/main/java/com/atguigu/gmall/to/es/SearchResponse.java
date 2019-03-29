@@ -5,13 +5,13 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-@Data
+@Data//查询结果对象(品牌、分类、属性集合、商品集合、分页信息)
 public class SearchResponse implements Serializable{
     private SearchResponseAttrVo brand;//品牌
     private SearchResponseAttrVo catelog;//分类
     //所有商品的顶头显示的筛选属性
     private List<SearchResponseAttrVo> attrVos=new ArrayList<>();
-    //检索出来的商品信息
+    //检索出来的所有商品信息
     private List<EsProduct> products=new ArrayList<>();
     //分页信息
     private Long total;//总记录数

@@ -16,5 +16,5 @@ public class SearchResponseAttrVo implements Serializable{
 
     // private Integer searchType;
     //属性名称
-    private String name;//网络制式
+    private String name;
 }
