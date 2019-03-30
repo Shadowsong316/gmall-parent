@@ -57,7 +57,7 @@ public class GmallSearchServiceImpl implements GmallSearchService {
     public SearchResponse searchProduct(SearchParam param) throws IOException {
         //1.根据页面传递的参数构建检索的DSL语句
         String queryDSL = buildSearchDsl(param);
-        Search search = new Search.Builder(queryDSL).addIndex("gulishop").addType("product").build();
+        Search search = new Search.Builder(queryDSL).addIndex(EsConstant.ES_PRODUCT_INDEX).addType(EsConstant.ES_PRODUCT_TYPE).build();
         //2.执行查询
         SearchResult result = jestClient.execute(search);
         //3.封装和分析查询结果
@@ -136,12 +136,12 @@ public class GmallSearchServiceImpl implements GmallSearchService {
             boolQuery.should(QueryBuilders.matchQuery("keywords", param.getKeyword()));
         }
         //2过滤
-        if (param.getCatelog3Id() != null) {
+        if (param.getCatelog3() != null) {
             //分类ID
-            boolQuery.filter(QueryBuilders.termsQuery("productCategoryId", param.getCatelog3Id()));
+            boolQuery.filter(QueryBuilders.termsQuery("productCategoryName", param.getCatelog3()));
         }
-        if (param.getBrandId() != null) {
-            boolQuery.filter(QueryBuilders.termsQuery("brandId", param.getBrandId()));
+        if (param.getBrand() != null) {
+            boolQuery.filter(QueryBuilders.termsQuery("brandName", param.getBrand()));
         }
         //传了属性
         if (param.getProps() != null && param.getProps().length > 0) {
