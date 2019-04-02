@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/gmall-admin-web/gmall-admin-web.iml" filepath="$PROJECT_DIR$/gmall-admin-web/gmall-admin-web.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-api/gmall-api.iml" filepath="$PROJECT_DIR$/gmall-api/gmall-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gmall-cart/gmall-cart.iml" filepath="$PROJECT_DIR$/gmall-cart/gmall-cart.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-cas/gmall-cas.iml" filepath="$PROJECT_DIR$/gmall-cas/gmall-cas.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-cms/gmall-cms.iml" filepath="$PROJECT_DIR$/gmall-cms/gmall-cms.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-common/gmall-common.iml" filepath="$PROJECT_DIR$/gmall-common/gmall-common.iml" />

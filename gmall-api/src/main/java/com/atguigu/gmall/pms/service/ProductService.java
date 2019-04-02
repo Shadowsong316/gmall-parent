@@ -67,4 +67,6 @@ public interface ProductService extends IService<Product> {
     List<EsProductAttributeValue> getProductBaseAttr(Long productId);
 
     Product getProductByIdFromCache(Long productId);
+
+    SkuStock getSkuInfo(Long skuId);
 }

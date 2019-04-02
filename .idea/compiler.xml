@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="gmall-admin-web" />
         <module name="gmall-api" />
+        <module name="gmall-cart" />
         <module name="gmall-cas" />
         <module name="gmall-cms" />
         <module name="gmall-common" />
@@ -28,6 +29,7 @@
     <bytecodeTargetLevel target="1.8">
       <module name="gmall-admin-web" target="1.8" />
       <module name="gmall-api" target="1.8" />
+      <module name="gmall-cart" target="1.8" />
       <module name="gmall-cas" target="1.8" />
       <module name="gmall-cms" target="1.8" />
       <module name="gmall-common" target="1.8" />

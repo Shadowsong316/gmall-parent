@@ -455,4 +455,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         jedis.close();
         return product;
     }
+
+    @Override
+    public SkuStock getSkuInfo(Long skuId) {
+        //加上缓存的查询
+        SkuStock skuStock = skuStockMapper.selectById(skuId);
+        return skuStock;
+    }
 }
