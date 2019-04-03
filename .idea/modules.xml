@@ -20,6 +20,7 @@
       <module fileurl="file://$PROJECT_DIR$/gmall-sms/gmall-sms.iml" filepath="$PROJECT_DIR$/gmall-sms/gmall-sms.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-ums/gmall-ums.iml" filepath="$PROJECT_DIR$/gmall-ums/gmall-ums.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-wms/gmall-wms.iml" filepath="$PROJECT_DIR$/gmall-wms/gmall-wms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rabbit-demo/rabbit-demo.iml" filepath="$PROJECT_DIR$/rabbit-demo/rabbit-demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/redis-test/redis-test.iml" filepath="$PROJECT_DIR$/redis-test/redis-test.iml" />
     </modules>
   </component>

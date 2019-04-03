@@ -77,7 +77,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private ProductMapper productMapper;
 //    @Autowired
 //    private ProductCategoryService productCategoryService;
-
     @Override
     public Map<String, Object> pageProduct(PmsProductQueryParam productQueryParam, Integer pageSize, Integer pageNum) {
         Integer publishStatus = productQueryParam.getPublishStatus();

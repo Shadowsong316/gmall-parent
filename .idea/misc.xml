@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/gmall-java-sys/pom.xml" />
         <option value="$PROJECT_DIR$/gmall-php-sys/pom.xml" />
         <option value="$PROJECT_DIR$/gmall-cart/pom.xml" />
+        <option value="$PROJECT_DIR$/rabbit-demo/pom.xml" />
       </list>
     </option>
   </component>
