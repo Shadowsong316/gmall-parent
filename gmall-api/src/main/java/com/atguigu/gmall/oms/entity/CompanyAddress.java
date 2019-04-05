@@ -17,8 +17,8 @@ import java.io.Serializable;
  * 公司收发货地址表
  * </p>
  *
- * @author Shadowsong
- * @since 2019-03-25
+ * @author Lfy
+ * @since 2019-03-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

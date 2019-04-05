@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -37,5 +38,12 @@ public class SkuStockServiceImpl extends ServiceImpl<SkuStockMapper, SkuStock> i
     public List<SkuStock> getAllSkuInfoByProductId(Long productId) {
 
         return baseMapper.selectList(new QueryWrapper<SkuStock>().eq("product_id",productId));
+    }
+
+    @Override
+    public BigDecimal getSkuPriceById(Long skuId) {
+        //TODO 查缓存+读写锁
+        SkuStock skuStock = baseMapper.selectById(skuId);
+        return skuStock.getPrice();
     }
 }

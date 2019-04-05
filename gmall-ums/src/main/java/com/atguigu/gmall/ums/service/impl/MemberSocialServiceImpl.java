@@ -40,6 +40,7 @@ public class MemberSocialServiceImpl extends ServiceImpl<MemberSocialMapper, Mem
     MemberMapper memberMapper;
     @Autowired
     MemberSocialMapper memberSocialMapper;
+
     /**
      * 分布式锁和数据库层Transaction提供的锁定机制都可以；
      * SELECT FOR UPDATE
@@ -52,22 +53,22 @@ public class MemberSocialServiceImpl extends ServiceImpl<MemberSocialMapper, Mem
     @Override
     public Member getMemberInfo(WeiboAccessTokenVo tokenVo) {
         Member member = null;
-        if(tokenVo instanceof WeiboAccessTokenVo){
-            WeiboAccessTokenVo token  = (WeiboAccessTokenVo) tokenVo;
+        if (tokenVo instanceof WeiboAccessTokenVo) {
+            WeiboAccessTokenVo token = (WeiboAccessTokenVo) tokenVo;
             //1、系统有没有
             member = memberSocialMapper.getMemberInfo(token.getUid());
-            if(member == null){
+            if (member == null) {
                 //这个社交账号第一次登陆
                 //注册与绑定流程
                 Member registMember = new Member();
                 //
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-                HttpGet httpGet = new HttpGet("https://api.weibo.com/2/users/show.json?access_token="+tokenVo.getAccess_token()+"&uid="+token.getUid());
+                HttpGet httpGet = new HttpGet("https://api.weibo.com/2/users/show.json?access_token=" + tokenVo.getAccess_token() + "&uid=" + token.getUid());
                 try {
                     CloseableHttpResponse execute = httpClient.execute(httpGet);
                     HttpEntity entity = execute.getEntity();
                     String s = EntityUtils.toString(entity);
-                    System.out.println("从社交品台获取到的数据："+s);
+                    System.out.println("从社交品台获取到的数据：" + s);
                     WeiboUserVo object = JSON.parseObject(s, WeiboUserVo.class);
 
                     //初始化微博数据进来
@@ -77,14 +78,14 @@ public class MemberSocialServiceImpl extends ServiceImpl<MemberSocialMapper, Mem
 
                     //数据库底层的select 与 select for update；
                     //幂等性设计
-                    List<MemberSocial> memberSocials =  memberSocialMapper.selectAccessTokenForUpdate(tokenVo.getAccess_token());
-                    if(memberSocials!=null&& memberSocials.size()>0){
+                    List<MemberSocial> memberSocials = memberSocialMapper.selectAccessTokenForUpdate(tokenVo.getAccess_token());
+                    if (memberSocials != null && memberSocials.size() > 0) {
                         //查出了数据，有社交信息，那就直接按照社交的uid。继续把用户查出来返回
                         MemberSocial memberSocial = memberSocials.get(0);
                         //查出这个member返回
                         member = memberMapper.selectById(memberSocial.getUserId());
 
-                    }else{
+                    } else {
 
                         HintManager.getInstance().setMasterRouteOnly();
                         //给系统插入一个新用户
@@ -99,19 +100,14 @@ public class MemberSocialServiceImpl extends ServiceImpl<MemberSocialMapper, Mem
 
                         //保存用户
                         memberSocialMapper.insert(memberSocial);
-                        System.out.println("memberSocialMapper.insert...."+tokenVo.getAccess_token());
+                        System.out.println("memberSocialMapper.insert...." + tokenVo.getAccess_token());
                     }
-
                 } catch (IOException e) {
-
                 }
-
-            }else {
+            } else {
                 return member;
             }
-
         }
-
         return member;
     }
 }

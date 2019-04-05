@@ -18,8 +18,8 @@ import java.math.BigDecimal;
  * 订单中所包含的商品
  * </p>
  *
- * @author Shadowsong
- * @since 2019-03-25
+ * @author Lfy
+ * @since 2019-03-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

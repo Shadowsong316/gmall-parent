@@ -3,6 +3,7 @@ package com.atguigu.gmall.pms.service;
 import com.atguigu.gmall.pms.entity.SkuStock;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -20,4 +21,6 @@ public interface SkuStockService extends IService<SkuStock> {
     void updateSkuStock(Long pid, List<SkuStock> skuStockList);
 
     List<SkuStock> getAllSkuInfoByProductId(Long productId);
+
+    BigDecimal getSkuPriceById(Long skuId);
 }

@@ -16,6 +16,7 @@
         <module name="gmall-java-sys" />
         <module name="gmall-mbg" />
         <module name="gmall-oms" />
+        <module name="gmall-order" />
         <module name="gmall-php-sys" />
         <module name="gmall-pms" />
         <module name="gmall-portal-web" />
@@ -38,6 +39,7 @@
       <module name="gmall-java-sys" target="1.8" />
       <module name="gmall-mbg" target="1.8" />
       <module name="gmall-oms" target="1.8" />
+      <module name="gmall-order" target="1.8" />
       <module name="gmall-parent" target="1.8" />
       <module name="gmall-php-sys" target="1.8" />
       <module name="gmall-pms" target="1.8" />
