@@ -18,6 +18,7 @@
       <module fileurl="file://$PROJECT_DIR$/gmall-pms/gmall-pms.iml" filepath="$PROJECT_DIR$/gmall-pms/gmall-pms.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-portal-web/gmall-portal-web.iml" filepath="$PROJECT_DIR$/gmall-portal-web/gmall-portal-web.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-search/gmall-search.iml" filepath="$PROJECT_DIR$/gmall-search/gmall-search.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gmall-seckill/gmall-seckill.iml" filepath="$PROJECT_DIR$/gmall-seckill/gmall-seckill.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-sms/gmall-sms.iml" filepath="$PROJECT_DIR$/gmall-sms/gmall-sms.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-ums/gmall-ums.iml" filepath="$PROJECT_DIR$/gmall-ums/gmall-ums.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-wms/gmall-wms.iml" filepath="$PROJECT_DIR$/gmall-wms/gmall-wms.iml" />

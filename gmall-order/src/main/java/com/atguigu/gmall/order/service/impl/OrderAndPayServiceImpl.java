@@ -4,6 +4,10 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.alibaba.fastjson.JSON;
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.atguigu.gmall.cart.entity.Cart;
 import com.atguigu.gmall.cart.entity.CartItem;
 import com.atguigu.gmall.cart.service.CartService;
@@ -11,6 +15,7 @@ import com.atguigu.gmall.constant.RedisCacheConstant;
 import com.atguigu.gmall.oms.entity.Order;
 import com.atguigu.gmall.oms.entity.OrderItem;
 import com.atguigu.gmall.oms.service.OrderAndPayService;
+import com.atguigu.gmall.order.config.AlipayConfig;
 import com.atguigu.gmall.order.mapper.OrderItemMapper;
 import com.atguigu.gmall.order.mapper.OrderMapper;
 import com.atguigu.gmall.to.OrderMQTo;
@@ -20,6 +25,8 @@ import com.atguigu.gmall.ums.entity.MemberReceiveAddress;
 import com.atguigu.gmall.ums.service.MemberService;
 import com.atguigu.gmall.vo.OrderResponseVo;
 import com.atguigu.gmall.vo.OrderSubmitVo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,6 +113,7 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
             //3 计算订单总额信息
             List<CartItem> cartItems = cartService.cartItemsForJieSuan(orderSubmitVo.getToken());
             Cart cart = new Cart();
+            cart.setItems(cartItems);
             BigDecimal totalPrice = cart.getTotalPrice();
             order.setTotalAmount(totalPrice);
             //4 订单状态是未支付
@@ -155,5 +163,72 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
 //            //3查出这个用户在购物车中需要结账的所有物品
 //            //给数据库中保存订单数据
 //
+    }
+    /**
+     *
+     * @param out_trade_no 商户在支付宝保存的订单号
+     * @param total_amount 订单总金额
+     * @param subject      订单标题
+     * @param body          订单body
+     * @return
+     */
+    public String payMyOrder(String out_trade_no, String total_amount, String subject, String body) {
+        //0、验价
+        //一不要让MySQL隐式转换   price="12.98"
+        BigDecimal bigDecimal = new BigDecimal(total_amount);
+
+        Order orderSn = orderMapper.selectOne(new QueryWrapper<Order>().eq("order_sn", out_trade_no));
+        if(!orderSn.getTotalAmount().equals(bigDecimal)){
+            //验证成功...
+            throw  new RuntimeException("前端非法提交请求");
+        }
+
+        // 1、创建支付宝客户端
+        AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.gatewayUrl, AlipayConfig.app_id,
+                AlipayConfig.merchant_private_key, "json", AlipayConfig.charset, AlipayConfig.alipay_public_key,
+                AlipayConfig.sign_type);
+
+        // 2、创建一次支付请求
+        AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
+        alipayRequest.setReturnUrl(AlipayConfig.return_url);
+        alipayRequest.setNotifyUrl(AlipayConfig.notify_url);
+
+        // 商户订单号，商户网站订单系统中唯一订单号，必填
+        // 付款金额，必填
+        // 订单名称，必填
+        // 商品描述，可空
+
+        // 3、构造支付请求数据
+        alipayRequest.setBizContent("{\"out_trade_no\":\"" + out_trade_no + "\"," + "\"total_amount\":\"" + total_amount
+                + "\"," + "\"subject\":\"" + subject + "\"," + "\"body\":\"" + body + "\","
+                + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
+
+        String result = "";
+        try {
+            // 4、请求
+            result = alipayClient.pageExecute(alipayRequest).getBody();
+        } catch (AlipayApiException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return result;// 支付跳转页的代码
+
+    }
+
+    @Override
+    public void updateOrderStatus(String out_trade_no, OrderStatusEnum finished) {
+        Order order = new Order();
+        order.setStatus(finished.getCode());
+        orderMapper.update(order,new UpdateWrapper<Order>().eq("order_sn",out_trade_no));
+
+
+
+    }
+
+    @Override
+    public Order getOrderByOrderSn(String orderSn) {
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq("order_sn", orderSn));
+        return order;
     }
 }

@@ -21,6 +21,7 @@
         <module name="gmall-pms" />
         <module name="gmall-portal-web" />
         <module name="gmall-search" />
+        <module name="gmall-seckill" />
         <module name="gmall-sms" />
         <module name="gmall-ums" />
         <module name="gmall-wms" />
@@ -45,6 +46,7 @@
       <module name="gmall-pms" target="1.8" />
       <module name="gmall-portal-web" target="1.8" />
       <module name="gmall-search" target="1.8" />
+      <module name="gmall-seckill" target="1.8" />
       <module name="gmall-sms" target="1.8" />
       <module name="gmall-ums" target="1.8" />
       <module name="gmall-wms" target="1.8" />

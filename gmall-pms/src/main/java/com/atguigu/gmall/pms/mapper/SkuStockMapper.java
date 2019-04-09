@@ -18,5 +18,7 @@ public interface SkuStockMapper extends BaseMapper<SkuStock> {
 
     void updateSkuStock(@Param("pid") Long pid,@Param("skuStockList") List<SkuStock> skuStockList);
 
+    void updateStock(@Param("skuId") Long skuId,@Param("quantity") Integer quantity);
 
+    void releaseStock(Long productSkuId, Integer productQuantity);
 }

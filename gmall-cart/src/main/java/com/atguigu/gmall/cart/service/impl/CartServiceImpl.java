@@ -16,6 +16,7 @@ import com.atguigu.gmall.pms.service.ProductService;
 import com.atguigu.gmall.pms.service.SkuStockService;
 import com.atguigu.gmall.ums.entity.Member;
 import org.redisson.api.RMap;
+import org.redisson.api.RSemaphore;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -37,6 +38,11 @@ public class CartServiceImpl implements CartService {
     @Reference
     SkuStockService skuStockService;
 
+    /*分布式限流,简单限流，没有根据时间窗*/
+    public void limiter() throws InterruptedException {
+        RSemaphore orderCountId = redissonClient.getSemaphore("orderCountId");
+        orderCountId.tryAcquire();
+    }
     /**
      * 登录不登录都待cart-key,没登录我们会返回cartkey
      * 登录了就额外加上自己的token
